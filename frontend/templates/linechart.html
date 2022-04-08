@@ -1,0 +1,83 @@
+{% load static %}
+
+
+
+<html>
+
+<head>
+    <!--Load the AJAX API-->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        const api_url = 'http://192.168.69.42/chartapi/';
+
+        async function getapi(url) {
+
+            // Storing response
+            const response = await fetch(url);
+
+            // Storing data in form of JSON
+            var data = await response.json();
+            return data;
+        }
+        // Calling that async function
+
+
+
+
+
+
+
+
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', { 'packages': ['corechart'] });
+
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        async function drawChart() {
+
+            const api_url = 'http://192.168.69.42/chartapi/';
+
+            var temp = await getapi(api_url);
+            var tdata = [
+                ['Price', 'Size'],
+                [50, 7], [60, 8], [70, 8], [80, 9], [90, 9], [100, 9],
+                [110, 10], [120, 11], [130, 14], [140, 14], [150, 15]
+            ];
+            console.log(temp.array);
+            console.log(tdata);
+
+            var data = google.visualization.arrayToDataTable(temp.array);
+
+            var options = {
+                title: 'Temperature time graph',
+                hAxis: { title: 'Time' },
+                vAxis: { title: 'Temperature' },
+                legend: 'none',
+                trendlines: {
+                    0: {
+                        type: 'exponential',
+                        showR2: true,
+                        visibleInLegend: true,
+                        color: 'red'
+                    }
+                }    // Draw a trendline for data series 0.
+
+
+            };
+
+            options.trendlines[0].type = 'exponential';
+
+            var chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+
+<body>
+    <!--Div that will hold the pie chart-->
+    <div id="chart_div"></div>
+</body>
+
+</html>
