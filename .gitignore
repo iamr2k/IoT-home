@@ -29,3 +29,10 @@ media
 .directory
 static/
 api/fm_transmitter
+connect_device_package.zip
+RaspiHome.cert.pem
+RaspiHome.private.key
+RaspiHome.public.key
+root-CA.crt
+start.sh
+api/fm_transmitter
