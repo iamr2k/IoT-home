@@ -15,6 +15,7 @@
  */
  '''
 
+import requests
 from multiprocessing.reduction import ACKNOWLEDGE
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import logging
@@ -29,16 +30,16 @@ AllowedActions = ['both', 'publish', 'subscribe']
 
 def customCallback(client, userdata, message):
     print("Received a new message: ")
-    print(message.payload)
+    print(json.loads(message.payload))
     print("from topic: ")
     print(message.topic)
     print("--------------\n\n")
 
-
+import os
 host = "adbxgzfkc7fye-ats.iot.ap-south-1.amazonaws.com"
-rootCAPath = "root-CA.crt"
-certificatePath = "RaspiHome.cert.pem"
-privateKeyPath = "RaspiHome.private.key"
+rootCAPath = "/home/pi/rbk/temp/mqtt-cert/root-CA.crt"
+certificatePath = "/home/pi/rbk/temp/mqtt-cert/RaspiHome.cert.pem"
+privateKeyPath = "/home/pi/rbk/temp/mqtt-cert/RaspiHome.private.key"
 port = 8883
 useWebsocket = False
 clientId = "basicPubSub"
@@ -77,9 +78,10 @@ myAWSIoTMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
 
 # Connect and subscribe to AWS IoT
 myAWSIoTMQTTClient.connect()
-if mode == 'both' or mode == 'subscribe':
-    myAWSIoTMQTTClient.subscribe(topic, 1, customCallback)
-time.sleep(2)
+while True:
+    if mode == 'both' or mode == 'subscribe':
+        myAWSIoTMQTTClient.subscribe(topic, 1, customCallback)
+    time.sleep(2)
 
 # Publish to the same topic in a loop forever
 loopCount = 0
@@ -88,10 +90,10 @@ if mode == 'both' or mode == 'publish':
     message['message'] = u_message
     message['sequence'] = loopCount
     messageJson = json.dumps(message)
-    myAWSIoTMQTTClient.publish(topic, messageJson, 1)
-    if mode == 'publish':
-        print('Published topic %s: %s\n' % (topic, messageJson))
-    loopCount += 1
+    # myAWSIoTMQTTClient.publish(topic, messageJson, 1)
+    # if mode == 'both':
+    #     # print('Published topic %s: %s\n' % (topic, messageJson))
+    # loopCount += 1
 
 
 def ACK(*args, **kwargs):
@@ -109,9 +111,12 @@ def on_message_received(topic, payload, **kwargs):
     print("Received message from topic '{}': {}".format(topic, payload))
 
 
-subscribe_future, packet_id = myAWSIoTMQTTClient.subscribe(
-    topic=topic,
-    QoS=1,
-    callback=on_message_received
-)
+# subscribe_future = myAWSIoTMQTTClient.subscribe(
+#     topic="newd",
+#     QoS=1,
+#     callback=ACK
+# )
 # subscribe_result = subscribe_future.result()
+
+# res = requests.get("https://3.110.34.167/v1/search/similar_products/")
+# print(res.text)

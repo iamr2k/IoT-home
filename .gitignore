@@ -36,3 +36,4 @@ RaspiHome.public.key
 root-CA.crt
 start.sh
 api/fm_transmitter
+aws-iot-device-sdk-python

@@ -12,5 +12,5 @@ iot_client.publish(topic=topic, payload="""{
   "message": "Hello World!",
   "sequence": 7
 }""")
-res = iot_client.subscribe(topic=topic, qos=1)
-print(res)
+# res = iot_client.subscribe(topic=topic, qos=1)
+# print(res)

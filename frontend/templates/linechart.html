@@ -8,7 +8,7 @@
     <!--Load the AJAX API-->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        const api_url = 'http://192.168.69.42/chartapi/';
+        const api_url = 'http://weather.local/chartapi/';
 
         async function getapi(url) {
 
@@ -37,7 +37,7 @@
 
         async function drawChart() {
 
-            const api_url = 'http://192.168.69.42/chartapi/';
+            const api_url = 'http://weather.local/chartapi/';
 
             var temp = await getapi(api_url);
             var tdata = [

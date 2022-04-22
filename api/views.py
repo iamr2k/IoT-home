@@ -40,6 +40,19 @@ class tempViewSet(APIView):
         return Response(data={"message": "Deleted"})
 
 
+class tempassistViewSet(APIView):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    serializer_class = tempSerializer
+
+    def get(self, request):
+        queryset = temp_log.objects.all().order_by('-id')
+        serializer = self.serializer_class(queryset, many=True)
+
+        return Response(data=serializer.data[0])
+
+
 class chartapi(APIView):
     def get(self, request):
         queryset = temp_log.objects.all().order_by('-id')
