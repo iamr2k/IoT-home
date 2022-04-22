@@ -38,7 +38,7 @@ def linechart(request):
         date = i["time"].split(".")[0]
         datem = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S')
         if f_date == datem.day:
-            time = (datem.hour * 60) + datem.minute - 60
+            time = str(datem.hour) + ":"+str(datem.minute)
             arr.append([time, i["temp"]])
 
     context['temp'] = json.dumps(arr)

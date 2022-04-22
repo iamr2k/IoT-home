@@ -3,10 +3,11 @@
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import temp_log
+
 import requests
 import datetime
 from .broadcast import transmit
+from .models import temp_log
 from .serializers import tempSerializer, broadcast_ser
 import Adafruit_DHT
 DHT_SENSOR = Adafruit_DHT.DHT22
@@ -48,7 +49,7 @@ class tempassistViewSet(APIView):
 
     def get(self, request):
         queryset = temp_log.objects.all().order_by('-id')
-        serializer = self.serializer_class(queryset, many=True)
+        serializer = tempSerializer(queryset, many=True)
 
         return Response(data=serializer.data[0])
 
@@ -65,7 +66,7 @@ class chartapi(APIView):
             date = i["time"].split(".")[0]
             datem = datetime.datetime.strptime(date, '%Y-%m-%dT%H:%M:%S')
             if f_date == datem.day:
-                time = (datem.hour * 60) + datem.minute - 60
+                time = str(datem.hour) + ":" + str(datem.minute)
                 arr.append([time, i["temp"]])
         return Response(data={"array": arr})
 
